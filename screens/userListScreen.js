@@ -20,7 +20,9 @@ const userListScreen = ({navigation}) => {
             {
                 users.map(user=>{
                     return (
-                        <ListItem key={user.id}>
+                        <ListItem key={user.id} bottomDivider onPress={()=>{navigation.navigate('UserDetailScreen',{
+                            userId:user.id})
+                        }}>
                             <ListItem.Chevron/>
                             <Avatar source={{
                                 uri:'https://estaticos.muyinteresante.es/media/cache/760x570_thumb/uploads/images/article/55365cde3787b2187a1f0fbc/impresion-cara.jpg'
