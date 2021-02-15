@@ -4,12 +4,13 @@ import { ActivityIndicator } from 'react-native'
 import { View, Button, TextInput, ScrollView, StyleSheet } from 'react-native'
 import firebase from '../db/firebase'
 const userDetailScreen = ({route, navigation}) => {
-    const [user, setUser] = useState({
+    const initialState={
         id:'',
         name:'',
         email:'',
         phone:''
-    })
+    }
+    const [user, setUser] = useState(initialState);
     const [loading, setloading] = useState(true)
     const getUserById=async (id)=>{
         const dbRef = firebase.db.collection('users').doc(id);
@@ -27,6 +28,16 @@ const userDetailScreen = ({route, navigation}) => {
     const deleteUser= async()=>{
         const dbRef = firebase.db.collection('users').doc(route.params['userId']);
         await dbRef.delete();
+        navigation.navigate('UsersList')
+    }
+    const updateUser =async()=>{
+        const dbRef = firebase.db.collection('users').doc(user.id);
+        await dbRef.set({
+            name:user.name,
+            email:user.email,
+            phone:user.phone
+        });
+        setUser(initialState);
         navigation.navigate('UsersList')
     }
     const opeConfirmationAlert=()=>{
@@ -56,7 +67,7 @@ const userDetailScreen = ({route, navigation}) => {
                 <TextInput placeholder="Teléfono de usuario" value={user.phone} onChangeText={(value)=>handleChangeText('phone',value)}/>
             </View>
             <View>
-                <Button title="Actualizar usuario" />
+                <Button title="Actualizar usuario" onPress={updateUser}/>
             </View>
             <View>
                 <Button color="#e37399" title="Eliminar usuario" onPress={opeConfirmationAlert}/>
